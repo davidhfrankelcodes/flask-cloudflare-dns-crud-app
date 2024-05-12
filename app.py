@@ -99,4 +99,6 @@ def delete_dns_record(zone_id, record_id):
     requests.delete(url, headers=headers)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(
+        debug=True if 'true' in os.getenv("FLASK_DEBUG", "").lower() else False,
+        )
