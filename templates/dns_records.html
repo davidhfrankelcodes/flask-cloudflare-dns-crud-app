@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DNS Records</title>
+</head>
+<body>
+    <h1>DNS Records for {{ config.DOMAIN }}</h1>
+    <a href="{{ url_for('logout') }}">Logout</a>
+    <h2>Create DNS Record</h2>
+    <form method="POST">
+        <input type="hidden" name="action" value="create">
+        <input type="text" name="type" placeholder="Type (e.g., A, CNAME)" required>
+        <input type="text" name="name" placeholder="Name" required>
+        <input type="text" name="content" placeholder="Content" required>
+        <input type="number" name="ttl" placeholder="TTL" required>
+        <label>
+            <input type="checkbox" name="proxied"> Proxied
+        </label>
+        <button type="submit">Create</button>
+    </form>
+
+    <h2>Existing DNS Records</h2>
+    <ul>
+    {% for record in records %}
+        <li>
+            {{ record.type }} - {{ record.name }} - {{ record.content }} - {{ record.ttl }} - {{ 'Proxied' if record.proxied else 'Not Proxied' }}
+            <form method="POST" style="display:inline;">
+                <input type="hidden" name="action" value="update">
+                <input type="hidden" name="record_id" value="{{ record.id }}">
+                <input type="text" name="type" value="{{ record.type }}">
+                <input type="text" name="name" value="{{ record.name }}">
+                <input type="text" name="content" value="{{ record.content }}">
+                <input type="number" name="ttl" value="{{ record.ttl }}">
+                <label>
+                    <input type="checkbox" name="proxied" {% if record.proxied %}checked{% endif %}> Proxied
+                </label>
+                <button type="submit">Update</button>
+            </form>
+            <form method="POST" style="display:inline;">
+                <input type="hidden" name="action" value="delete">
+                <input type="hidden" name="record_id" value="{{ record.id }}">
+                <button type="submit">Delete</button>
+            </form>
+        </li>
+    {% endfor %}
+    </ul>
+</body>
+</html>
