@@ -61,3 +61,27 @@ li form {
 .alert {
     color: red;
 }
+.pagination {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.pagination a, .pagination span {
+    display: inline-block;
+    margin: 0 5px;
+    padding: 10px 15px;
+    color: #333;
+    text-decoration: none;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.pagination a:hover {
+    background-color: #f4f4f4;
+}
+
+.pagination span {
+    background-color: #f4f4f4;
+    border: 1px solid #ccc;
+    font-weight: bold;
+}

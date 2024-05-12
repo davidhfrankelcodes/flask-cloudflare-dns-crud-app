@@ -51,6 +51,16 @@
             </li>
         {% endfor %}
         </ul>
+
+        <div class="pagination">
+            {% if page > 1 %}
+                <a href="{{ url_for('dns_records', page=page-1, per_page=per_page) }}">&laquo; Previous</a>
+            {% endif %}
+            <span>Page {{ page }} of {{ total_pages }}</span>
+            {% if page < total_pages %}
+                <a href="{{ url_for('dns_records', page=page+1, per_page=per_page) }}">Next &raquo;</a>
+            {% endif %}
+        </div>
     </div>
 </body>
 </html>

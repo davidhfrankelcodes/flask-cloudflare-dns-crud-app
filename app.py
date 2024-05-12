@@ -46,6 +46,8 @@ def dns_records():
 
     domain = app.config['DOMAIN']
     zone_id = get_zone_id(domain)
+    page = request.args.get('page', 1, type=int)
+    per_page = request.args.get('per_page', 10, type=int)
 
     if request.method == 'POST':
         action = request.form.get('action')
@@ -57,8 +59,14 @@ def dns_records():
         elif action == 'delete':
             delete_dns_record(zone_id, record_id)
 
-    records = list_dns_records(zone_id)
-    return render_template('dns_records.html', records=records)
+    records, total_records = list_dns_records(zone_id, page, per_page)
+    total_pages = (total_records + per_page - 1) // per_page  # Calculate total pages
+
+    return render_template('dns_records.html', 
+                           records=records, 
+                           page=page, 
+                           per_page=per_page, 
+                           total_pages=total_pages)
 
 def get_zone_id(domain):
     url = f'{ZONES_ENDPOINT}?name={domain}'
@@ -68,11 +76,12 @@ def get_zone_id(domain):
         return data['result'][0]['id']
     return None
 
-def list_dns_records(zone_id):
-    url = f'{ZONES_ENDPOINT}/{zone_id}/dns_records'
+def list_dns_records(zone_id, page, per_page):
+    url = f'{ZONES_ENDPOINT}/{zone_id}/dns_records?page={page}&per_page={per_page}'
     response = requests.get(url, headers=headers)
     data = response.json()
-    return data['result'] if data['success'] else []
+    total_records = data['result_info']['total_count'] if data['success'] else 0
+    return data['result'], total_records if data['success'] else []
 
 def create_dns_record(zone_id, form):
     url = f'{ZONES_ENDPOINT}/{zone_id}/dns_records'
