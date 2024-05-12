@@ -100,5 +100,8 @@ def delete_dns_record(zone_id, record_id):
 
 if __name__ == '__main__':
     app.run(
-        debug=True if 'true' in os.getenv("FLASK_DEBUG", "").lower() else False,
+        debug=True if 'true' in os.getenv(
+            "FLASK_DEBUG", "").lower() else False,
+        host=os.getenv("FLASK_HOST", "localhost"),
+        port=os.getenv("FLASK_PORT", 5000)
         )
