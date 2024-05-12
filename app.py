@@ -11,6 +11,8 @@ app.config['PASSWORD'] = os.getenv('APP_PASSWORD')
 app.config['CLOUDFLARE_API_TOKEN'] = os.getenv('CLOUDFLARE_API_TOKEN')
 app.config['DOMAIN'] = os.getenv('DOMAIN')
 
+ZONES_ENDPOINT = 'https://api.cloudflare.com/client/v4/zones'
+
 headers = {
     'Authorization': f'Bearer {app.config["CLOUDFLARE_API_TOKEN"]}',
     'Content-Type': 'application/json'
@@ -59,7 +61,7 @@ def dns_records():
     return render_template('dns_records.html', records=records)
 
 def get_zone_id(domain):
-    url = f'https://api.cloudflare.com/client/v4/zones?name={domain}'
+    url = f'{ZONES_ENDPOINT}?name={domain}'
     response = requests.get(url, headers=headers)
     data = response.json()
     if data['success']:
@@ -67,13 +69,13 @@ def get_zone_id(domain):
     return None
 
 def list_dns_records(zone_id):
-    url = f'https://api.cloudflare.com/client/v4/zones/{zone_id}/dns_records'
+    url = f'{ZONES_ENDPOINT}/{zone_id}/dns_records'
     response = requests.get(url, headers=headers)
     data = response.json()
     return data['result'] if data['success'] else []
 
 def create_dns_record(zone_id, form):
-    url = f'https://api.cloudflare.com/client/v4/zones/{zone_id}/dns_records'
+    url = f'{ZONES_ENDPOINT}/{zone_id}/dns_records'
     payload = {
         'type': form['type'],
         'name': form['name'],
@@ -84,7 +86,7 @@ def create_dns_record(zone_id, form):
     requests.post(url, headers=headers, json=payload)
 
 def update_dns_record(zone_id, record_id, form):
-    url = f'https://api.cloudflare.com/client/v4/zones/{zone_id}/dns_records/{record_id}'
+    url = f'{ZONES_ENDPOINT}/{zone_id}/dns_records/{record_id}'
     payload = {
         'type': form['type'],
         'name': form['name'],
@@ -95,7 +97,7 @@ def update_dns_record(zone_id, record_id, form):
     requests.put(url, headers=headers, json=payload)
 
 def delete_dns_record(zone_id, record_id):
-    url = f'https://api.cloudflare.com/client/v4/zones/{zone_id}/dns_records/{record_id}'
+    url = f'{ZONES_ENDPOINT}/{zone_id}/dns_records/{record_id}'
     requests.delete(url, headers=headers)
 
 if __name__ == '__main__':
