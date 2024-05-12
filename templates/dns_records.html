@@ -27,6 +27,19 @@
         </form>
 
         <h2>Existing DNS Records</h2>
+        <div class="search-filter">
+            <form method="GET" action="{{ url_for('dns_records') }}">
+                <input type="text" name="search" placeholder="Search..." value="{{ search }}">
+                <select name="record_type">
+                    <option value="">All Types</option>
+                    <option value="A" {% if record_type == 'A' %}selected{% endif %}>A</option>
+                    <option value="CNAME" {% if record_type == 'CNAME' %}selected{% endif %}>CNAME</option>
+                    <option value="TXT" {% if record_type == 'TXT' %}selected{% endif %}>TXT</option>
+                    <!-- Add more types as needed -->
+                </select>
+                <button type="submit">Filter</button>
+            </form>
+        </div>
         <ul>
         {% for record in records %}
             <li>
@@ -54,11 +67,11 @@
 
         <div class="pagination">
             {% if page > 1 %}
-                <a href="{{ url_for('dns_records', page=page-1, per_page=per_page) }}">&laquo; Previous</a>
+                <a href="{{ url_for('dns_records', page=page-1, per_page=per_page, search=search, record_type=record_type) }}">&laquo; Previous</a>
             {% endif %}
             <span>Page {{ page }} of {{ total_pages }}</span>
             {% if page < total_pages %}
-                <a href="{{ url_for('dns_records', page=page+1, per_page=per_page) }}">Next &raquo;</a>
+                <a href="{{ url_for('dns_records', page=page+1, per_page=per_page, search=search, record_type=record_type) }}">Next &raquo;</a>
             {% endif %}
         </div>
     </div>

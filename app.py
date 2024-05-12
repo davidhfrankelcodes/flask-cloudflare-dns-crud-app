@@ -48,6 +48,8 @@ def dns_records():
     zone_id = get_zone_id(domain)
     page = request.args.get('page', 1, type=int)
     per_page = request.args.get('per_page', 10, type=int)
+    search = request.args.get('search', '', type=str)
+    record_type = request.args.get('record_type', '', type=str)
 
     if request.method == 'POST':
         action = request.form.get('action')
@@ -59,14 +61,17 @@ def dns_records():
         elif action == 'delete':
             delete_dns_record(zone_id, record_id)
 
-    records, total_records = list_dns_records(zone_id, page, per_page)
+    all_records, total_records = list_dns_records(zone_id, search, record_type)
     total_pages = (total_records + per_page - 1) // per_page  # Calculate total pages
+    paginated_records = all_records[(page - 1) * per_page: page * per_page]
 
     return render_template('dns_records.html', 
-                           records=records, 
+                           records=paginated_records, 
                            page=page, 
                            per_page=per_page, 
-                           total_pages=total_pages)
+                           total_pages=total_pages, 
+                           search=search, 
+                           record_type=record_type)
 
 def get_zone_id(domain):
     url = f'{ZONES_ENDPOINT}?name={domain}'
@@ -76,12 +81,19 @@ def get_zone_id(domain):
         return data['result'][0]['id']
     return None
 
-def list_dns_records(zone_id, page, per_page):
-    url = f'{ZONES_ENDPOINT}/{zone_id}/dns_records?page={page}&per_page={per_page}'
+def list_dns_records(zone_id, search, record_type):
+    url = f'{ZONES_ENDPOINT}/{zone_id}/dns_records?per_page=1000'  # Retrieve up to 1000 records
     response = requests.get(url, headers=headers)
     data = response.json()
-    total_records = data['result_info']['total_count'] if data['success'] else 0
-    return data['result'], total_records if data['success'] else []
+    if not data['success']:
+        return [], 0
+    records = data['result']
+    if record_type:
+        records = [r for r in records if r['type'] == record_type]
+    if search:
+        records = [r for r in records if search.lower() in r['name'].lower() or search.lower() in r['content'].lower()]
+    total_records = len(records)
+    return records, total_records
 
 def create_dns_record(zone_id, form):
     url = f'{ZONES_ENDPOINT}/{zone_id}/dns_records'

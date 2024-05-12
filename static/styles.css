@@ -85,3 +85,39 @@ li form {
     border: 1px solid #ccc;
     font-weight: bold;
 }
+
+.search-filter {
+    margin-bottom: 20px;
+}
+
+.search-filter form {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.search-filter input[type="text"] {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.search-filter select {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.search-filter button {
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.search-filter button:hover {
+    background-color: #45a049;
+}
