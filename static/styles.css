@@ -1,20 +1,41 @@
+/* styles.css */
+
 body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f4f4f4;
+    background-color: #EEE;  /* Light Grey */
 }
 
 header {
-    background-color: #4CAF50;
-    color: white;
+    background-color: #FFEB3B;  /* Bright Yellow */
+    color: #222;  /* Dark Grey for better contrast */
     padding: 10px 0;
     text-align: center;
     margin-bottom: 20px;
 }
 
+header a {
+    color: #F48120;  /* Brand Orange */
+    text-decoration: none;
+    margin-left: 20px;
+}
+
+header a:hover {
+    text-decoration: underline;
+}
+
 h1, h2 {
-    color: #333;
+    color: #222;  /* Dark Grey */
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: white;  /* White */
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 form {
@@ -29,15 +50,21 @@ form input, form button, form label {
     max-width: 300px;
 }
 
+form input, form select {
+    border: 1px solid #CCC;
+    border-radius: 4px;
+}
+
 form button {
-    background-color: #4CAF50;
+    background-color: #F48120;  /* Brand Orange */
     color: white;
     border: none;
+    border-radius: 4px;
     cursor: pointer;
 }
 
 form button:hover {
-    background-color: #45a049;
+    background-color: #e2711d;
 }
 
 ul {
@@ -46,11 +73,11 @@ ul {
 }
 
 li {
-    background-color: white;
+    background-color: white;  /* White */
     margin: 10px 0;
     padding: 15px;
     border-radius: 5px;
-    box-shadow: 0 0 5px rgba(0,0,0,0.1);
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
 }
 
 li form {
@@ -61,6 +88,7 @@ li form {
 .alert {
     color: red;
 }
+
 .pagination {
     text-align: center;
     margin-top: 20px;
@@ -70,19 +98,20 @@ li form {
     display: inline-block;
     margin: 0 5px;
     padding: 10px 15px;
-    color: #333;
+    color: #333;  /* Dark Grey */
     text-decoration: none;
-    border: 1px solid #ddd;
+    border: 1px solid #DDD;  /* Light Border */
     border-radius: 5px;
 }
 
 .pagination a:hover {
-    background-color: #f4f4f4;
+    background-color: #F48120;  /* Brand Orange */
+    color: white;
 }
 
 .pagination span {
-    background-color: #f4f4f4;
-    border: 1px solid #ccc;
+    background-color: #EEE;  /* Light Grey */
+    border: 1px solid #CCC;
     font-weight: bold;
 }
 
@@ -99,19 +128,19 @@ li form {
 .search-filter input[type="text"] {
     flex: 1;
     padding: 10px;
-    border: 1px solid #ccc;
+    border: 1px solid #CCC;
     border-radius: 5px;
 }
 
 .search-filter select {
     padding: 10px;
-    border: 1px solid #ccc;
+    border: 1px solid #CCC;
     border-radius: 5px;
 }
 
 .search-filter button {
     padding: 10px 20px;
-    background-color: #4CAF50;
+    background-color: #F48120;  /* Brand Orange */
     color: white;
     border: none;
     border-radius: 5px;
@@ -119,5 +148,5 @@ li form {
 }
 
 .search-filter button:hover {
-    background-color: #45a049;
+    background-color: #e2711d;
 }
