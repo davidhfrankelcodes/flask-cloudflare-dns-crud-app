@@ -23,18 +23,33 @@
         <h2>Create DNS Record</h2>
         <form method="POST" onsubmit="return confirmAction('create this DNS record')">
             <input type="hidden" name="action" value="create">
-            <select name="type" required title="Select a valid DNS record type (e.g., A, CNAME, TXT, MX, etc.)">
-                <option value="">Select Type</option>
-                {% for type in valid_record_types %}
-                <option value="{{ type }}">{{ type }}</option>
-                {% endfor %}
-            </select>
-            <input type="text" name="name" placeholder="Name" required title="Enter the DNS record name (e.g., www)">
-            <input type="text" name="content" placeholder="Content" required title="Enter the DNS record content (e.g., IP address or target domain)">
-            <input type="number" name="ttl" placeholder="TTL" required title="Enter the TTL (Time to Live) in seconds">
-            <label title="Enable Cloudflare proxy for this record">
-                <input type="checkbox" name="proxied"> Proxied
-            </label>
+            <div class="field-group">
+                <select name="type" required>
+                    <option value="">Select Type</option>
+                    {% for type in valid_record_types %}
+                    <option value="{{ type }}">{{ type }}</option>
+                    {% endfor %}
+                </select>
+                <span class="tooltip" data-tooltip="Select a valid DNS record type (e.g., A, CNAME, TXT, MX, etc.)">?</span>
+            </div>
+            <div class="field-group">
+                <input type="text" name="name" placeholder="Name" required>
+                <span class="tooltip" data-tooltip="Enter the DNS record name (e.g., www)">?</span>
+            </div>
+            <div class="field-group">
+                <input type="text" name="content" placeholder="Content" required>
+                <span class="tooltip" data-tooltip="Enter the DNS record content (e.g., IP address or target domain)">?</span>
+            </div>
+            <div class="field-group">
+                <input type="number" name="ttl" placeholder="TTL" required>
+                <span class="tooltip" data-tooltip="Enter the TTL (Time to Live) in seconds">?</span>
+            </div>
+            <div class="field-group">
+                <label>
+                    <input type="checkbox" name="proxied"> Proxied
+                </label>
+                <span class="tooltip" data-tooltip="Enable Cloudflare proxy for this record">?</span>
+            </div>
             <button type="submit" title="Create this DNS record">Create</button>
         </form>
 
@@ -59,18 +74,32 @@
                 <form method="POST" style="display:inline;" onsubmit="return confirmAction('update this DNS record')">
                     <input type="hidden" name="action" value="update">
                     <input type="hidden" name="record_id" value="{{ record.id }}">
-                    <!-- Update form with dropdown for type -->
-                    <select name="type" required title="Select a valid DNS record type">
-                        {% for type in valid_record_types %}
-                        <option value="{{ type }}" {% if record.type == type %}selected{% endif %}>{{ type }}</option>
-                        {% endfor %}
-                    </select>
-                    <input type="text" name="name" value="{{ record.name }}" title="Edit the DNS record name">
-                    <input type="text" name="content" value="{{ record.content }}" title="Edit the DNS record content">
-                    <input type="number" name="ttl" value="{{ record.ttl }}" title="Edit the TTL in seconds">
-                    <label title="Toggle Cloudflare proxy for this record">
-                        <input type="checkbox" name="proxied" {% if record.proxied %}checked{% endif %}> Proxied
-                    </label>
+                    <div class="field-group">
+                        <select name="type" required>
+                            {% for type in valid_record_types %}
+                            <option value="{{ type }}" {% if record.type == type %}selected{% endif %}>{{ type }}</option>
+                            {% endfor %}
+                        </select>
+                        <span class="tooltip" data-tooltip="Select a valid DNS record type">?</span>
+                    </div>
+                    <div class="field-group">
+                        <input type="text" name="name" value="{{ record.name }}" title="Edit the DNS record name">
+                        <span class="tooltip" data-tooltip="Edit the DNS record name">?</span>
+                    </div>
+                    <div class="field-group">
+                        <input type="text" name="content" value="{{ record.content }}" title="Edit the DNS record content">
+                        <span class="tooltip" data-tooltip="Edit the DNS record content">?</span>
+                    </div>
+                    <div class="field-group">
+                        <input type="number" name="ttl" value="{{ record.ttl }}" title="Edit the TTL in seconds">
+                        <span class="tooltip" data-tooltip="Edit the TTL (Time to Live) in seconds">?</span>
+                    </div>
+                    <div class="field-group">
+                        <label title="Toggle Cloudflare proxy for this record">
+                            <input type="checkbox" name="proxied" {% if record.proxied %}checked{% endif %}> Proxied
+                        </label>
+                        <span class="tooltip" data-tooltip="Toggle Cloudflare proxy for this record">?</span>
+                    </div>
                     <button type="submit" title="Update this DNS record">Update</button>
                 </form>
                 <form method="POST" style="display:inline;" onsubmit="return confirmAction('delete this DNS record')">

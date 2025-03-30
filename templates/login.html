@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
     <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
 </head>
@@ -14,8 +15,11 @@
 
     <div class="container">
         <form method="POST">
-            <input type="password" name="password" placeholder="Password" required>
-            <button type="submit">Login</button>
+            <div class="field-group">
+                <input type="password" name="password" placeholder="Password" required>
+                <span class="tooltip" data-tooltip="Enter your application password">?</span>
+            </div>
+            <button type="submit" title="Login to your account">Login</button>
         </form>
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
