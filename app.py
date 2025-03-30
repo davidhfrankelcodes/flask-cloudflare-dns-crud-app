@@ -107,7 +107,7 @@ def create_dns_record(zone_id, form):
         'name': form['name'],
         'content': form['content'],
         'ttl': int(form['ttl']),
-        'proxied': form.get('proxied') == 'on'
+        'proxied': form.get('proxied') == 'true'
     }
     requests.post(url, headers=headers, json=payload)
 
@@ -118,7 +118,7 @@ def update_dns_record(zone_id, record_id, form):
         'name': form['name'],
         'content': form['content'],
         'ttl': int(form['ttl']),
-        'proxied': form.get('proxied') == 'on'
+        'proxied': form.get('proxied') == 'true'
     }
     requests.put(url, headers=headers, json=payload)
 
