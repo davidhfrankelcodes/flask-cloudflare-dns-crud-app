@@ -45,10 +45,11 @@
                 <span class="tooltip" data-tooltip="Enter the TTL (Time to Live) in seconds">?</span>
             </div>
             <div class="field-group">
-                <label>
-                    <input type="checkbox" name="proxied"> Proxied
-                </label>
-                <span class="tooltip" data-tooltip="Enable Cloudflare proxy for this record">?</span>
+                <select name="proxied" required title="Choose whether the record is Proxied (Orange Cloud) or DNS Only (Grey Cloud)">
+                     <option value="true">Proxied</option>
+                     <option value="false">DNS Only</option>
+                </select>
+                <span class="tooltip" data-tooltip="Choose whether to enable Cloudflare proxy: Proxied (Orange Cloud) means traffic goes through Cloudflare; DNS Only (Grey Cloud) does not.">?</span>
             </div>
             <button type="submit" title="Create this DNS record">Create</button>
         </form>
@@ -95,10 +96,11 @@
                         <span class="tooltip" data-tooltip="Edit the TTL (Time to Live) in seconds">?</span>
                     </div>
                     <div class="field-group">
-                        <label title="Toggle Cloudflare proxy for this record">
-                            <input type="checkbox" name="proxied" {% if record.proxied %}checked{% endif %}> Proxied
-                        </label>
-                        <span class="tooltip" data-tooltip="Toggle Cloudflare proxy for this record">?</span>
+                        <select name="proxied" required title="Choose whether the record is Proxied (Orange Cloud) or DNS Only (Grey Cloud)">
+                             <option value="true" {% if record.proxied %}selected{% endif %}>Proxied</option>
+                             <option value="false" {% if not record.proxied %}selected{% endif %}>DNS Only</option>
+                        </select>
+                        <span class="tooltip" data-tooltip="Choose whether to enable Cloudflare proxy: Proxied (Orange Cloud) means traffic goes through Cloudflare; DNS Only (Grey Cloud) does not.">?</span>
                     </div>
                     <button type="submit" title="Update this DNS record">Update</button>
                 </form>
