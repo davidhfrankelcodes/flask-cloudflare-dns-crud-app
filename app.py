@@ -44,6 +44,9 @@ def dns_records():
     if 'logged_in' not in session:
         return redirect(url_for('login'))
 
+    # Add this line to define valid record types
+    valid_record_types = ['A', 'CNAME', 'TXT', 'MX', 'AAAA', 'SRV', 'NS']
+
     domain = app.config['DOMAIN']
     zone_id = get_zone_id(domain)
     page = request.args.get('page', 1, type=int)
@@ -71,7 +74,9 @@ def dns_records():
                            per_page=per_page, 
                            total_pages=total_pages, 
                            search=search, 
-                           record_type=record_type)
+                           record_type=record_type,
+                           valid_record_types=valid_record_types,
+                           )  # Pass valid record types
 
 def get_zone_id(domain):
     url = f'{ZONES_ENDPOINT}?name={domain}'
