@@ -1,24 +1,29 @@
 /* styles.css */
 
+/* Import Google Font */
+@import url('https://fonts.googleapis.com/css?family=Roboto&display=swap');
+
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Roboto', Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #EEE;  /* Light Grey */
+    background-color: #f7f7f7;  /* Lighter background for contrast */
 }
 
 header {
-    background-color: #FFEB3B;  /* Bright Yellow */
-    color: #222;  /* Dark Grey for better contrast */
-    padding: 10px 0;
+    background: linear-gradient(45deg, #FFEB3B, #F48120);
+    color: #222;
+    padding: 15px 0;
     text-align: center;
     margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 header a {
-    color: #F48120;  /* Brand Orange */
+    color: #222; 
     text-decoration: none;
     margin-left: 20px;
+    font-weight: bold;
 }
 
 header a:hover {
@@ -26,38 +31,45 @@ header a:hover {
 }
 
 h1, h2 {
-    color: #222;  /* Dark Grey */
+    color: #333;
 }
 
 .container {
-    max-width: 800px;
-    margin: 0 auto;
-    background-color: white;  /* White */
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    max-width: 900px;
+    margin: 20px auto;
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 form {
     margin: 20px 0;
 }
 
-form input, form button, form label {
+form input, form select, form button, form label {
     display: block;
     margin: 10px 0;
     padding: 10px;
     width: 100%;
-    max-width: 300px;
+    max-width: 400px;
+    transition: all 0.3s ease;
 }
 
 form input, form select {
-    border: 1px solid #CCC;
+    border: 1px solid #ccc;
     border-radius: 4px;
 }
 
+form input:focus, form select:focus {
+    border-color: #F48120;
+    outline: none;
+    box-shadow: 0 0 5px rgba(244, 129, 32, 0.5);
+}
+
 form button {
-    background-color: #F48120;  /* Brand Orange */
-    color: white;
+    background-color: #F48120;
+    color: #fff;
     border: none;
     border-radius: 4px;
     cursor: pointer;
@@ -73,11 +85,11 @@ ul {
 }
 
 li {
-    background-color: white;  /* White */
+    background-color: #fff;
     margin: 10px 0;
     padding: 15px;
     border-radius: 5px;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 li form {
@@ -86,7 +98,8 @@ li form {
 }
 
 .alert {
-    color: red;
+    color: #d9534f;
+    font-weight: bold;
 }
 
 .pagination {
@@ -98,20 +111,20 @@ li form {
     display: inline-block;
     margin: 0 5px;
     padding: 10px 15px;
-    color: #333;  /* Dark Grey */
+    color: #333;
     text-decoration: none;
-    border: 1px solid #DDD;  /* Light Border */
+    border: 1px solid #ddd;
     border-radius: 5px;
 }
 
 .pagination a:hover {
-    background-color: #F48120;  /* Brand Orange */
-    color: white;
+    background-color: #F48120;
+    color: #fff;
 }
 
 .pagination span {
-    background-color: #EEE;  /* Light Grey */
-    border: 1px solid #CCC;
+    background-color: #eee;
+    border: 1px solid #ccc;
     font-weight: bold;
 }
 
@@ -128,20 +141,20 @@ li form {
 .search-filter input[type="text"] {
     flex: 1;
     padding: 10px;
-    border: 1px solid #CCC;
+    border: 1px solid #ccc;
     border-radius: 5px;
 }
 
 .search-filter select {
     padding: 10px;
-    border: 1px solid #CCC;
+    border: 1px solid #ccc;
     border-radius: 5px;
 }
 
 .search-filter button {
     padding: 10px 20px;
-    background-color: #F48120;  /* Brand Orange */
-    color: white;
+    background-color: #F48120;
+    color: #fff;
     border: none;
     border-radius: 5px;
     cursor: pointer;

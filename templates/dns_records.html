@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DNS Records</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
     <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
     <script>
@@ -13,67 +13,70 @@
         }
     </script>
 </head>
-
 <body>
     <header>
         <h1>DNS Records for {{ config.DOMAIN }}</h1>
-        <a href="{{ url_for('logout') }}">Logout</a>
+        <a href="{{ url_for('logout') }}" title="Logout from the application">Logout</a>
     </header>
 
     <div class="container">
         <h2>Create DNS Record</h2>
         <form method="POST" onsubmit="return confirmAction('create this DNS record')">
             <input type="hidden" name="action" value="create">
-            <select name="type" required>
+            <select name="type" required title="Select a valid DNS record type (e.g., A, CNAME, TXT, MX, etc.)">
                 <option value="">Select Type</option>
                 {% for type in valid_record_types %}
                 <option value="{{ type }}">{{ type }}</option>
                 {% endfor %}
             </select>
-            <input type="text" name="name" placeholder="Name" required>
-            <input type="text" name="content" placeholder="Content" required>
-            <input type="number" name="ttl" placeholder="TTL" required>
-            <label>
+            <input type="text" name="name" placeholder="Name" required title="Enter the DNS record name (e.g., www)">
+            <input type="text" name="content" placeholder="Content" required title="Enter the DNS record content (e.g., IP address or target domain)">
+            <input type="number" name="ttl" placeholder="TTL" required title="Enter the TTL (Time to Live) in seconds">
+            <label title="Enable Cloudflare proxy for this record">
                 <input type="checkbox" name="proxied"> Proxied
             </label>
-            <button type="submit">Create</button>
+            <button type="submit" title="Create this DNS record">Create</button>
         </form>
 
         <h2>Existing DNS Records</h2>
         <div class="search-filter">
             <form method="GET" action="{{ url_for('dns_records') }}">
-                <input type="text" name="search" placeholder="Search..." value="{{ search }}">
-                <select name="record_type">
+                <input type="text" name="search" placeholder="Search..." value="{{ search }}" title="Search by record name or content">
+                <select name="record_type" title="Filter by DNS record type">
                     <option value="">All Types</option>
                     <option value="A" {% if record_type=='A' %}selected{% endif %}>A</option>
                     <option value="CNAME" {% if record_type=='CNAME' %}selected{% endif %}>CNAME</option>
                     <option value="TXT" {% if record_type=='TXT' %}selected{% endif %}>TXT</option>
                     <!-- Add more types as needed -->
                 </select>
-                <button type="submit">Filter</button>
+                <button type="submit" title="Apply search filter">Filter</button>
             </form>
         </div>
         <ul>
             {% for record in records %}
             <li>
-                <strong>{{ record.type }}</strong> - {{ record.name }} - {{ record.content }} - {{ record.ttl }} - {{
-                'Proxied' if record.proxied else 'Not Proxied' }}
+                <strong>{{ record.type }}</strong> - {{ record.name }} - {{ record.content }} - {{ record.ttl }} - {{ 'Proxied' if record.proxied else 'Not Proxied' }}
                 <form method="POST" style="display:inline;" onsubmit="return confirmAction('update this DNS record')">
                     <input type="hidden" name="action" value="update">
                     <input type="hidden" name="record_id" value="{{ record.id }}">
-                    <input type="text" name="type" value="{{ record.type }}">
-                    <input type="text" name="name" value="{{ record.name }}">
-                    <input type="text" name="content" value="{{ record.content }}">
-                    <input type="number" name="ttl" value="{{ record.ttl }}">
-                    <label>
+                    <!-- Update form with dropdown for type -->
+                    <select name="type" required title="Select a valid DNS record type">
+                        {% for type in valid_record_types %}
+                        <option value="{{ type }}" {% if record.type == type %}selected{% endif %}>{{ type }}</option>
+                        {% endfor %}
+                    </select>
+                    <input type="text" name="name" value="{{ record.name }}" title="Edit the DNS record name">
+                    <input type="text" name="content" value="{{ record.content }}" title="Edit the DNS record content">
+                    <input type="number" name="ttl" value="{{ record.ttl }}" title="Edit the TTL in seconds">
+                    <label title="Toggle Cloudflare proxy for this record">
                         <input type="checkbox" name="proxied" {% if record.proxied %}checked{% endif %}> Proxied
                     </label>
-                    <button type="submit">Update</button>
+                    <button type="submit" title="Update this DNS record">Update</button>
                 </form>
                 <form method="POST" style="display:inline;" onsubmit="return confirmAction('delete this DNS record')">
                     <input type="hidden" name="action" value="delete">
                     <input type="hidden" name="record_id" value="{{ record.id }}">
-                    <button type="submit">Delete</button>
+                    <button type="submit" title="Delete this DNS record">Delete</button>
                 </form>
             </li>
             {% endfor %}
@@ -81,17 +84,13 @@
 
         <div class="pagination">
             {% if page > 1 %}
-            <a
-                href="{{ url_for('dns_records', page=page-1, per_page=per_page, search=search, record_type=record_type) }}">&laquo;
-                Previous</a>
+            <a href="{{ url_for('dns_records', page=page-1, per_page=per_page, search=search, record_type=record_type) }}" title="Go to previous page">&laquo; Previous</a>
             {% endif %}
             <span>Page {{ page }} of {{ total_pages }}</span>
-            {% if page < total_pages %} <a
-                href="{{ url_for('dns_records', page=page+1, per_page=per_page, search=search, record_type=record_type) }}">
-                Next &raquo;</a>
-                {% endif %}
+            {% if page < total_pages %}
+            <a href="{{ url_for('dns_records', page=page+1, per_page=per_page, search=search, record_type=record_type) }}" title="Go to next page">Next &raquo;</a>
+            {% endif %}
         </div>
     </div>
 </body>
-
 </html>
