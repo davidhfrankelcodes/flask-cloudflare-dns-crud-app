@@ -1,23 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DNS Records</title>
     <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
-    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+    <link rel="icon" href="{{ url_for('static', filename='favicon.png') }}" type="image/x-icon">
     <script>
         function confirmAction(action) {
             return confirm(`Are you sure you want to ${action}?`);
         }
     </script>
 </head>
+
 <body>
     <header>
         <h1>DNS Records for {{ config.DOMAIN }}</h1>
         <a href="{{ url_for('logout') }}" title="Logout from the application">Logout</a>
     </header>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <ul class="alert">
+        {% for category, message in messages %}
+        <li class="{{ category }}">{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    {% endwith %}
 
     <div class="container">
         <h2>Create DNS Record</h2>
@@ -30,7 +41,8 @@
                     <option value="{{ type }}">{{ type }}</option>
                     {% endfor %}
                 </select>
-                <span class="tooltip" data-tooltip="Select a valid DNS record type (e.g., A, CNAME, TXT, MX, etc.)">?</span>
+                <span class="tooltip"
+                    data-tooltip="Select a valid DNS record type (e.g., A, CNAME, TXT, MX, etc.)">?</span>
             </div>
             <div class="field-group">
                 <input type="text" name="name" placeholder="Name" required>
@@ -38,18 +50,21 @@
             </div>
             <div class="field-group">
                 <input type="text" name="content" placeholder="Content" required>
-                <span class="tooltip" data-tooltip="Enter the DNS record content (e.g., IP address or target domain)">?</span>
+                <span class="tooltip"
+                    data-tooltip="Enter the DNS record content (e.g., IP address or target domain)">?</span>
             </div>
             <div class="field-group">
                 <input type="number" name="ttl" placeholder="TTL" required>
                 <span class="tooltip" data-tooltip="Enter the TTL (Time to Live) in seconds">?</span>
             </div>
             <div class="field-group">
-                <select name="proxied" required title="Choose whether the record is Proxied (Orange Cloud) or DNS Only (Grey Cloud)">
-                     <option value="true">Proxied</option>
-                     <option value="false">DNS Only</option>
+                <select name="proxied" required
+                    title="Choose whether the record is Proxied (Orange Cloud) or DNS Only (Grey Cloud)">
+                    <option value="true">Proxied</option>
+                    <option value="false">DNS Only</option>
                 </select>
-                <span class="tooltip" data-tooltip="Choose whether to enable Cloudflare proxy: Proxied (Orange Cloud) means traffic goes through Cloudflare; DNS Only (Grey Cloud) does not.">?</span>
+                <span class="tooltip"
+                    data-tooltip="Choose whether to enable Cloudflare proxy: Proxied (Orange Cloud) means traffic goes through Cloudflare; DNS Only (Grey Cloud) does not.">?</span>
             </div>
             <button type="submit" title="Create this DNS record">Create</button>
         </form>
@@ -57,7 +72,8 @@
         <h2>Existing DNS Records</h2>
         <div class="search-filter">
             <form method="GET" action="{{ url_for('dns_records') }}">
-                <input type="text" name="search" placeholder="Search..." value="{{ search }}" title="Search by record name or content">
+                <input type="text" name="search" placeholder="Search..." value="{{ search }}"
+                    title="Search by record name or content">
                 <select name="record_type" title="Filter by DNS record type">
                     <option value="">All Types</option>
                     <option value="A" {% if record_type=='A' %}selected{% endif %}>A</option>
@@ -71,14 +87,15 @@
         <ul>
             {% for record in records %}
             <li>
-                <strong>{{ record.type }}</strong> - {{ record.name }} - {{ record.content }} - {{ record.ttl }} - {{ 'Proxied' if record.proxied else 'Not Proxied' }}
+                <strong>{{ record.type }}</strong> - {{ record.name }} - {{ record.content }} - {{ record.ttl }} - {{
+                'Proxied' if record.proxied else 'Not Proxied' }}
                 <form method="POST" style="display:inline;" onsubmit="return confirmAction('update this DNS record')">
                     <input type="hidden" name="action" value="update">
                     <input type="hidden" name="record_id" value="{{ record.id }}">
                     <div class="field-group">
                         <select name="type" required>
                             {% for type in valid_record_types %}
-                            <option value="{{ type }}" {% if record.type == type %}selected{% endif %}>{{ type }}</option>
+                            <option value="{{ type }}" {% if record.type==type %}selected{% endif %}>{{ type }}</option>
                             {% endfor %}
                         </select>
                         <span class="tooltip" data-tooltip="Select a valid DNS record type">?</span>
@@ -88,7 +105,8 @@
                         <span class="tooltip" data-tooltip="Edit the DNS record name">?</span>
                     </div>
                     <div class="field-group">
-                        <input type="text" name="content" value="{{ record.content }}" title="Edit the DNS record content">
+                        <input type="text" name="content" value="{{ record.content }}"
+                            title="Edit the DNS record content">
                         <span class="tooltip" data-tooltip="Edit the DNS record content">?</span>
                     </div>
                     <div class="field-group">
@@ -96,11 +114,13 @@
                         <span class="tooltip" data-tooltip="Edit the TTL (Time to Live) in seconds">?</span>
                     </div>
                     <div class="field-group">
-                        <select name="proxied" required title="Choose whether the record is Proxied (Orange Cloud) or DNS Only (Grey Cloud)">
-                             <option value="true" {% if record.proxied %}selected{% endif %}>Proxied</option>
-                             <option value="false" {% if not record.proxied %}selected{% endif %}>DNS Only</option>
+                        <select name="proxied" required
+                            title="Choose whether the record is Proxied (Orange Cloud) or DNS Only (Grey Cloud)">
+                            <option value="true" {% if record.proxied %}selected{% endif %}>Proxied</option>
+                            <option value="false" {% if not record.proxied %}selected{% endif %}>DNS Only</option>
                         </select>
-                        <span class="tooltip" data-tooltip="Choose whether to enable Cloudflare proxy: Proxied (Orange Cloud) means traffic goes through Cloudflare; DNS Only (Grey Cloud) does not.">?</span>
+                        <span class="tooltip"
+                            data-tooltip="Choose whether to enable Cloudflare proxy: Proxied (Orange Cloud) means traffic goes through Cloudflare; DNS Only (Grey Cloud) does not.">?</span>
                     </div>
                     <button type="submit" title="Update this DNS record">Update</button>
                 </form>
@@ -115,13 +135,16 @@
 
         <div class="pagination">
             {% if page > 1 %}
-            <a href="{{ url_for('dns_records', page=page-1, per_page=per_page, search=search, record_type=record_type) }}" title="Go to previous page">&laquo; Previous</a>
+            <a href="{{ url_for('dns_records', page=page-1, per_page=per_page, search=search, record_type=record_type) }}"
+                title="Go to previous page">&laquo; Previous</a>
             {% endif %}
             <span>Page {{ page }} of {{ total_pages }}</span>
-            {% if page < total_pages %}
-            <a href="{{ url_for('dns_records', page=page+1, per_page=per_page, search=search, record_type=record_type) }}" title="Go to next page">Next &raquo;</a>
-            {% endif %}
+            {% if page < total_pages %} <a
+                href="{{ url_for('dns_records', page=page+1, per_page=per_page, search=search, record_type=record_type) }}"
+                title="Go to next page">Next &raquo;</a>
+                {% endif %}
         </div>
     </div>
 </body>
+
 </html>

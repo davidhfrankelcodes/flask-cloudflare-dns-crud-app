@@ -44,45 +44,56 @@ def dns_records():
     if 'logged_in' not in session:
         return redirect(url_for('login'))
 
-    # Add this line to define valid record types
     valid_record_types = ['A', 'CNAME', 'TXT', 'MX', 'AAAA', 'SRV', 'NS']
-
     domain = app.config['DOMAIN']
-    zone_id = get_zone_id(domain)
     page = request.args.get('page', 1, type=int)
     per_page = request.args.get('per_page', 10, type=int)
     search = request.args.get('search', '', type=str)
     record_type = request.args.get('record_type', '', type=str)
 
-    if request.method == 'POST':
-        action = request.form.get('action')
-        record_id = request.form.get('record_id')
-        if action == 'create':
-            create_dns_record(zone_id, request.form)
-        elif action == 'update':
-            update_dns_record(zone_id, record_id, request.form)
-        elif action == 'delete':
-            delete_dns_record(zone_id, record_id)
+    records = []
+    total_records = 0
+    error_message = None
 
-    all_records, total_records = list_dns_records(zone_id, search, record_type)
-    total_pages = (total_records + per_page - 1) // per_page  # Calculate total pages
-    paginated_records = all_records[(page - 1) * per_page: page * per_page]
+    try:
+        zone_id = get_zone_id(domain)
+        if not zone_id:
+            raise ValueError("Could not fetch zone ID. Check your domain or API token.")
 
-    return render_template('dns_records.html', 
-                           records=paginated_records, 
-                           page=page, 
-                           per_page=per_page, 
-                           total_pages=total_pages, 
-                           search=search, 
+        if request.method == 'POST':
+            action = request.form.get('action')
+            record_id = request.form.get('record_id')
+            if action == 'create':
+                create_dns_record(zone_id, request.form)
+            elif action == 'update':
+                update_dns_record(zone_id, record_id, request.form)
+            elif action == 'delete':
+                delete_dns_record(zone_id, record_id)
+
+        records, total_records = list_dns_records(zone_id, search, record_type)
+
+    except Exception as e:
+        # Gracefully fail with a flash message
+        error_message = f"Unable to load DNS records: {str(e)}"
+        flash(error_message, 'danger')
+
+    total_pages = (total_records + per_page - 1) // per_page
+    paginated_records = records[(page - 1) * per_page: page * per_page]
+
+    return render_template('dns_records.html',
+                           records=paginated_records,
+                           page=page,
+                           per_page=per_page,
+                           total_pages=total_pages,
+                           search=search,
                            record_type=record_type,
-                           valid_record_types=valid_record_types,
-                           )  # Pass valid record types
+                           valid_record_types=valid_record_types)
 
 def get_zone_id(domain):
     url = f'{ZONES_ENDPOINT}?name={domain}'
     response = requests.get(url, headers=headers)
     data = response.json()
-    if data['success']:
+    if data['success'] and data['result']:
         return data['result'][0]['id']
     return None
 

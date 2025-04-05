@@ -1,18 +1,18 @@
 services:
   flask_app:
-    build: .
+    # build: . # Uncomment to build locally
+    image: davidhfrankelcodes/flask-cloudflare-dns-crud-app:latest
     network_mode: bridge
     ports:
-      - "${HOST_PORT}:5000"
+      - "${HOST_PORT:-5000}:5000"
     restart: unless-stopped
     volumes:
       - .:/app
     environment:
       FLASK_ENV: development
-      FLASK_DEBUG: ${FLASK_DEBUG}
+      FLASK_DEBUG: ${FLASK_DEBUG:-false}
       FLASK_APP: app.py
-      APP_PASSWORD: ${APP_PASSWORD}
-      CLOUDFLARE_API_TOKEN: ${CLOUDFLARE_API_TOKEN}
-      DOMAIN: ${DOMAIN}
-      FLASK_HOST: ${FLASK_HOST}
-
+      APP_PASSWORD: ${APP_PASSWORD:-super_strong_password}
+      CLOUDFLARE_API_TOKEN: ${CLOUDFLARE_API_TOKEN:-SeeReadmeForInstructions}
+      DOMAIN: ${DOMAIN:-yourdomain.com}
+      FLASK_HOST: ${FLASK_HOST:-0.0.0.0} # Secure your host by not using 0.0.0.0
