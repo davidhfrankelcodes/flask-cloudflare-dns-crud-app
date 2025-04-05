@@ -1,17 +1,20 @@
 # Flask Cloudflare DNS Crud App
 
-## File structure
-```
-cloudflare_dns_app/
-├── app.py
-├── .env
-├── templates/
-│   ├── index.html
-│   ├── login.html
-│   └── dns_records.html
-└── static/
-    └── styles.css
-```
+This is a simple CRUD app for managing DNS records through cloudflare. 
+
+## Who is this for?
+
+The cloudflare UI can be slow if it starts to hog memory. Deploy this app in your homelab to add a faster, simpler UI.
+
+## Features
+- Add a DNS record
+- Modify a DNS record
+- Delete a DNS record
+- Search DNS records
+
+## Screenshot
+![Basic UI for DNS records](https://github.com/user-attachments/assets/06d07b4d-9497-45be-b8bd-35a6cf525ad1)
+
 
 ## Instructions to Create a Cloudflare API Token
 
