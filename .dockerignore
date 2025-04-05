@@ -1,0 +1,38 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pdb
+*.bak
+
+# Virtual environments
+venv/
+env/
+ENV/
+
+# Environment files
+.env
+.env.*
+
+# Editor / IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*.swn
+*~
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Git
+.git
+.gitignore
+
+# Misc
+notes.txt
+
+# Docker
+docker-compose.override.yml
